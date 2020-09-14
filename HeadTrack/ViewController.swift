@@ -7,10 +7,33 @@
 //
 
 import UIKit
-
+import Socket
+import os.log
 class ViewController: UIViewController {
+    let addr = "192.168.1.75"
+    let port: Int32 = 5060
+    var fullAddr: Socket.Address?
+    var socket: Socket?
+    
+    @IBAction func connectToHost(_ sender: Any) {
+
+         fullAddr = Socket.createAddress(for: addr, on: port)
+        os_log("Created Socket at %@!", type: .info, addr)
+        do {
+            socket =  try Socket.create(family: .inet, type: .datagram, proto: .udp)
+        } catch {
+            os_log("Error sending message", type: .error)
+        }
+    
+    }
     @IBAction func sendUDP(_ sender: Any) {
-        print("test");
+        do {
+            try socket?.write(from: "Hello!", to: fullAddr!)
+            try socket?.write(from: "Different Packet!", to: fullAddr!)
+            os_log("Sent message with size", type: .info)
+        } catch {
+            os_log("Error sendng packets", type: .error)
+        }
     }
     
     override func viewDidLoad() {

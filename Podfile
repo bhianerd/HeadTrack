@@ -6,5 +6,6 @@ target 'HeadTrack' do
   use_frameworks!
 
   # Pods for HeadTrack
+  pod 'BlueSocket'
 
 end
